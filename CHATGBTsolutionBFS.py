@@ -11,6 +11,7 @@ def get_neighbors(node, maze):
 
     return neighbors
 
+
 def solve_maze_bfs(maze, start):
     queue = []  # Initialize a queue for BFS
     visited = set()  # Keep track of visited nodes
@@ -32,6 +33,7 @@ def solve_maze_bfs(maze, start):
             path.append(start)
             return path[::-1]  # Reverse the path
 
+        # Get neighbors, add them to stack and visited
         for neighbor in get_neighbors(current_node, maze):
             if neighbor not in visited:
                 queue.append(neighbor)
@@ -39,6 +41,37 @@ def solve_maze_bfs(maze, start):
                 paths[neighbor] = current_node
 
     return None  # If no solution is found
+
+
+def solve_maze_dfs(maze, start):
+    stack = [] # Initialize a stack for DFS
+    visited = set() # Keep track of visited nodes
+    paths = {} # Keep track of paths
+
+    # Add starting point to the stack and mark it as visited
+    stack.append(start)
+    visited.add(start)
+
+    while stack:
+        current_node = stack.pop()
+        i,j = current_node
+        if maze[i][j] == 'G':
+            # Backtrack to find the solution
+            solution_path = []
+            while current_node != start:
+                solution_path.append(current_node)
+                current_node = paths[current_node]
+            solution_path.append(start)
+            return solution_path[::-1] # Reverse the path
+
+        # Get neighbors, add them to stack and visited
+        for neighbor in get_neighbors(current_node, maze):
+            if neighbor not in visited:
+                stack.append(neighbor)
+                visited.add(neighbor)
+                paths[neighbor] = current_node
+
+    return None     # If no solution
 
 
 # Maze representation
